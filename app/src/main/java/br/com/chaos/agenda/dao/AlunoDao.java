@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,16 +38,22 @@ public class AlunoDao extends SQLiteOpenHelper{
     public void insere(Aluno aluno) {
         SQLiteDatabase db = getWritableDatabase();
 
+        ContentValues content = pegaDadosUsuario(aluno);
+
+        db.insert("Alunos", null, content);
+
+
+    }
+
+    @NonNull
+    private ContentValues pegaDadosUsuario(Aluno aluno) {
         ContentValues content = new ContentValues();
         content.put("nome", aluno.getNome());
         content.put("endereco", aluno.getEndereco());
         content.put("telefone", aluno.getTelefone());
         content.put("email", aluno.getEmail());
         content.put("nota", aluno.getNota());
-
-        db.insert("Alunos", null, content);
-
-
+        return content;
     }
 
     public List<Aluno> listarAlunos() {
@@ -76,5 +83,15 @@ public class AlunoDao extends SQLiteOpenHelper{
 
         String[] argumentos = {String.valueOf(aluno.getId())};
         db.delete("Alunos", "id = ?", argumentos);
+    }
+
+    public void atualiza(Aluno aluno) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues content = pegaDadosUsuario(aluno);
+
+        String[] argumentos = {aluno.getId().toString()};
+        db.update("Alunos", content, "id = ?", argumentos);
+        
     }
 }

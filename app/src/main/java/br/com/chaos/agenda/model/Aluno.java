@@ -1,10 +1,12 @@
 package br.com.chaos.agenda.model;
 
+import java.io.Serializable;
+
 /**
  * Created by gersonapollo on 09/06/17.
  */
 
-public class Aluno {
+public class Aluno implements Serializable{
 
     private Long id;
     private String nome;
