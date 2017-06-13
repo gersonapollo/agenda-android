@@ -13,6 +13,7 @@ public class Aluno implements Serializable{
     private String endereco;
     private String telefone;
     private String email;
+    private String site;
     private Double nota;
 
     public Long getId() {
@@ -53,6 +54,14 @@ public class Aluno implements Serializable{
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getSite() {
+        return site;
+    }
+
+    public void setSite(String site) {
+        this.site = site;
     }
 
     public Double getNota() {

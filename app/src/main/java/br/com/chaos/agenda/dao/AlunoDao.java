@@ -19,12 +19,12 @@ import br.com.chaos.agenda.model.Aluno;
 public class AlunoDao extends SQLiteOpenHelper{
 
     public AlunoDao(Context context) {
-        super(context, "Alunos", null, 2);
+        super(context, "Alunos", null, 1);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sql = "CREATE TABLE Alunos(id INTEGER PRIMARY KEY, nome TEXT NOT NULL, endereco TEXT, telefone TEXT, email TEXT, nota REAL)";
+        String sql = "CREATE TABLE Alunos(id INTEGER PRIMARY KEY, nome TEXT NOT NULL, endereco TEXT, telefone TEXT, email TEXT, site TEXT, nota REAL)";
         db.execSQL(sql);
     }
 
@@ -52,6 +52,7 @@ public class AlunoDao extends SQLiteOpenHelper{
         content.put("endereco", aluno.getEndereco());
         content.put("telefone", aluno.getTelefone());
         content.put("email", aluno.getEmail());
+        content.put("site", aluno.getSite());
         content.put("nota", aluno.getNota());
         return content;
     }
@@ -70,6 +71,7 @@ public class AlunoDao extends SQLiteOpenHelper{
             aluno.setEndereco(cursor.getString(cursor.getColumnIndex("endereco")));
             aluno.setTelefone(cursor.getString(cursor.getColumnIndex("telefone")));
             aluno.setEmail(cursor.getString(cursor.getColumnIndex("email")));
+            aluno.setSite(cursor.getString(cursor.getColumnIndex("site")));
             aluno.setNota(cursor.getDouble(cursor.getColumnIndex("nota")));
 
             alunos.add(aluno);
@@ -92,6 +94,6 @@ public class AlunoDao extends SQLiteOpenHelper{
 
         String[] argumentos = {aluno.getId().toString()};
         db.update("Alunos", content, "id = ?", argumentos);
-        
+
     }
 }
