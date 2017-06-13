@@ -7,20 +7,27 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.zip.Inflater;
 
 import javax.xml.datatype.Duration;
 
+import br.com.chaos.agenda.dao.AlunoDao;
+import br.com.chaos.agenda.helper.FormularioHelper;
+import br.com.chaos.agenda.model.Aluno;
+
 public class FormularioActivity extends AppCompatActivity {
+
+    private FormularioHelper helper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formulario);
 
-
+        helper = new FormularioHelper(this);
 
     }
 
@@ -36,7 +43,14 @@ public class FormularioActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.menu_formulario_ok:
-                Toast.makeText(FormularioActivity.this, "Botao Clicado", Toast.LENGTH_SHORT).show();
+                Aluno aluno = helper.getAluno();
+
+                AlunoDao dao = new AlunoDao(this);
+                dao.insere(aluno);
+                dao.close();
+
+                Toast.makeText(FormularioActivity.this, "Aluno "+aluno.getNome() +" Adicionado", Toast.LENGTH_SHORT).show();
+
                 finish();
                 break;
         }
