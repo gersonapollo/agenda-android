@@ -8,6 +8,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.ContextMenu;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,6 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import br.com.chaos.agenda.adapter.AlunosAdapter;
+import br.com.chaos.agenda.converter.AlunoConverter;
 import br.com.chaos.agenda.dao.AlunoDao;
 import br.com.chaos.agenda.model.Aluno;
 
@@ -72,6 +74,30 @@ public class ListaAlunosActivity extends AppCompatActivity {
         super.onResume();
         carregaLista();
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_lista_alunos, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_enviar_notas:
+                AlunoDao dao = new AlunoDao(this);
+                List<Aluno> alunos = dao.listarAlunos();
+                dao.close();
+
+                AlunoConverter converter = new AlunoConverter();
+                String json = converter.converteParaJson(alunos);
+
+                Toast.makeText(this, json, Toast.LENGTH_LONG).show();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
