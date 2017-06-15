@@ -19,6 +19,7 @@ import android.widget.Toast;
 import java.util.Arrays;
 import java.util.List;
 
+import br.com.chaos.agenda.adapter.AlunosAdapter;
 import br.com.chaos.agenda.dao.AlunoDao;
 import br.com.chaos.agenda.model.Aluno;
 
@@ -61,7 +62,8 @@ public class ListaAlunosActivity extends AppCompatActivity {
         List<Aluno> alunos = dao.listarAlunos();
         dao.close();
 
-        ArrayAdapter<Aluno> adapter = new ArrayAdapter<Aluno>(this, android.R.layout.simple_list_item_1, alunos);
+//        ArrayAdapter<Aluno> adapter = new ArrayAdapter<Aluno>(this, android.R.layout.simple_list_item_1, alunos);
+        AlunosAdapter adapter = new AlunosAdapter(this, alunos);
         listaAlunos.setAdapter(adapter);
     }
 

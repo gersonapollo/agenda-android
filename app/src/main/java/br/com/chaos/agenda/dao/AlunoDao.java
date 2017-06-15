@@ -19,7 +19,7 @@ import br.com.chaos.agenda.model.Aluno;
 public class AlunoDao extends SQLiteOpenHelper{
 
     public AlunoDao(Context context) {
-        super(context, "Alunos", null, 1);
+        super(context, "Alunos", null, 2);
     }
 
     @Override
@@ -30,9 +30,12 @@ public class AlunoDao extends SQLiteOpenHelper{
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        String sql = "DROP TABLE IF EXISTS Alunos";
-        db.execSQL(sql);
-        onCreate(db);
+        switch (oldVersion){
+            case 1:
+                String sql = "ALTER TABLE Alunos ADD COLUMN caminhoFoto TEXT ";
+                db.execSQL(sql);
+        }
+
     }
 
     public void insere(Aluno aluno) {
@@ -54,6 +57,7 @@ public class AlunoDao extends SQLiteOpenHelper{
         content.put("email", aluno.getEmail());
         content.put("site", aluno.getSite());
         content.put("nota", aluno.getNota());
+        content.put("caminhoFoto", aluno.getCaminhFoto());
         return content;
     }
 
@@ -73,7 +77,7 @@ public class AlunoDao extends SQLiteOpenHelper{
             aluno.setEmail(cursor.getString(cursor.getColumnIndex("email")));
             aluno.setSite(cursor.getString(cursor.getColumnIndex("site")));
             aluno.setNota(cursor.getDouble(cursor.getColumnIndex("nota")));
-
+            aluno.setCaminhFoto(cursor.getString(cursor.getColumnIndex("caminhoFoto")));
             alunos.add(aluno);
         }
         cursor.close();

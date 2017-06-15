@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -50,42 +51,28 @@ public class FormularioActivity extends AppCompatActivity {
             helper.preencherFormulario(aluno);
         }
 
-        Button botao = (Button) findViewById(R.id.formulario_botao_foto);
-        botao.setOnClickListener(new View.OnClickListener() {
+        View botaoFoto = findViewById(R.id.formulario_botao_foto);
+        botaoFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(ActivityCompat.checkSelfPermission(FormularioActivity.this, Manifest.permission.CAMERA)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(FormularioActivity.this, new String[]{Manifest.permission.CAMERA}, 999);
-                }
+                Intent intentFoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                caminhoFoto = getExternalFilesDir(null) + "/" + System.currentTimeMillis() + ".jpg";
-                File arquivo = new File(caminhoFoto);
-
-                Uri uri = Uri.fromFile(arquivo);
-
-                intent.putExtra(Intent.EXTRA_STREAM, uri);
-                startActivityForResult(intent, CAMERA_CODE);
-
+                caminhoFoto = getExternalFilesDir(null) + "/" + System.currentTimeMillis() +".jpg";
+                File arquivoFoto = new File(caminhoFoto);
+                FormularioActivity context = FormularioActivity.this;
+                intentFoto.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName()
+                        +".provider",arquivoFoto));
+                startActivityForResult(intentFoto, CAMERA_CODE);
             }
         });
-
-
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == Activity.RESULT_OK && requestCode == CAMERA_CODE){
-            ImageView foto = (ImageView) findViewById(R.id.formulario_foto);
-            Bitmap fotoBmp = BitmapFactory.decodeFile(caminhoFoto);
-            Bitmap bitmapReduzido = Bitmap.createScaledBitmap(fotoBmp, 300, 300, true);
-            foto.setImageBitmap(bitmapReduzido);
-            foto.setScaleType(ImageView.ScaleType.FIT_XY);
+           helper.carregarImagem(caminhoFoto);
 
         }
-
-
     }
 
     @Override
