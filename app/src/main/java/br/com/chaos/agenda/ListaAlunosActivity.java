@@ -24,6 +24,7 @@ import br.com.chaos.agenda.adapter.AlunosAdapter;
 import br.com.chaos.agenda.converter.AlunoConverter;
 import br.com.chaos.agenda.dao.AlunoDao;
 import br.com.chaos.agenda.model.Aluno;
+import br.com.chaos.agenda.webservice.WebClient;
 
 public class ListaAlunosActivity extends AppCompatActivity {
 
@@ -86,14 +87,7 @@ public class ListaAlunosActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.menu_enviar_notas:
-                AlunoDao dao = new AlunoDao(this);
-                List<Aluno> alunos = dao.listarAlunos();
-                dao.close();
-
-                AlunoConverter converter = new AlunoConverter();
-                String json = converter.converteParaJson(alunos);
-
-                Toast.makeText(this, json, Toast.LENGTH_LONG).show();
+                new EnviaAlunostask(this).execute();
                 break;
         }
 
